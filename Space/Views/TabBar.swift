@@ -13,30 +13,19 @@ struct TabBar: View {
 			ContentView()
 				.frame(maxWidth: .infinity, maxHeight: .infinity)
 			HStack {
-				Spacer()
-				
-				Label {
-					Text("Learn now")
-						.font(.caption2)
-				} icon: {
-					Image(systemName: "house")
-						.symbolVariant(.fill)
-						.font(.body.bold())
-						.frame(width: 80, height: 29)
+				ForEach(TabItem.data) { item in
+					Label {
+						Text(item.title)
+							.font(.caption2)
+							.lineLimit(1)
+					} icon: {
+						Image(systemName: item.iconName)
+							.symbolVariant(.fill)
+							.font(.body.bold())
+							.frame(width: 80, height: 29)
+					}
 				}
-
-				Spacer()
-				
-				Label {
-					Text("Explore")
-						.font(.caption2)
-				} icon: {
-					Image(systemName: "magnifyingglass")
-						.symbolVariant(.fill)
-						.font(.body.bold())
-						.frame(width: 80, height: 29)
-				}
-				Spacer()
+				.frame(maxWidth: .infinity)
 			}
 			.padding(.top, 14)
 			.labelStyle(.vertically)
@@ -51,6 +40,6 @@ struct TabBar: View {
 struct TabBar_Previews: PreviewProvider {
 	static var previews: some View {
 		TabBar()
-//			.preferredColorScheme(.dark)
+			.preferredColorScheme(.dark)
 	}
 }
