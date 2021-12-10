@@ -8,77 +8,16 @@
 import SwiftUI
 
 struct AccountView: View {
+	@State private var isPinned: Bool = false
 	@State private var isDeleted: Bool = false
 	
 	
 	var body: some View {
 		NavigationView {
 			List {
-				VStack(spacing: 8) {
-					Image(systemName: "person.crop.circle.fill.badge.checkmark")
-						.symbolVariant(.circle.fill)
-						.font(.system(size: 26))
-						.symbolRenderingMode(.palette)
-						.foregroundStyle(.blue, .blue.opacity(0.3))
-						.padding()
-						.background(
-							Circle().fill(.ultraThinMaterial)
-						)
-						.background(
-							Image(systemName: "hexagon")
-								.symbolVariant(.fill)
-								.foregroundColor(.blue)
-								.font(.system(size: 200))
-								.offset(x: -50, y: -80)
-						)
-					Text("Nikita Rossik")
-						.font(.title.weight(.semibold))
-					HStack {
-						Image(systemName: "location")
-							.imageScale(.large)
-						Text("Russia")
-							.foregroundColor(.secondary)
-					}
-				}
-				.frame(maxWidth: .infinity)
-				.padding(.bottom)
-				
-				Section {
-					NavigationLink {
-						Text("Settings View")
-					} label: {
-						Label("Settings", systemImage: "gear")
-					}
-					NavigationLink {
-						Text("Billing View")
-					} label: {
-						Label("Billing", systemImage: "creditcard")
-					}
-					NavigationLink {} label: {
-						Label("Help", systemImage: "questionmark")
-					}
-				}
-				.accentColor(.primary)
-				.listRowSeparator(.hidden)
-				
-				Section {
-					if !isDeleted {
-						Link(destination: linkToGithub) {
-							HStack {
-								Label("Github", systemImage: "icloud")
-								Spacer()
-								Image(systemName: "link")
-									.foregroundColor(.secondary)
-							}
-						}
-						.swipeActions {
-							deleteAction
-							pinAction
-						}
-					}
-				}
-				.accentColor(.primary)
-				
+				profile
+				menu
+				linksSection
 			}
 			.listStyle(.insetGrouped)
 			.navigationTitle("Account")
@@ -103,11 +42,70 @@ extension AccountView {
 	
 	private var pinAction: some View {
 		Button {
-			// action
+			isPinned.toggle()
 		} label: {
-			Label("Pin", systemImage: "pin")
+			switch isPinned {
+				case true:
+					Label("Unpin", systemImage: "pin.slash")
+				default:
+					Label("Pin", systemImage: "pin")
+			}
 		}
-		.tint(.yellow)
+		.tint(isPinned ? .gray : .yellow)
+	}
+	
+	private var profile: some View {
+		ProfileCard(
+			personName: "Nikita Rossik",
+			countryName: "Russia",
+			imageName: nil
+		)
+	}
+	
+	private var menu: some View {
+		Section {
+			NavigationLink {
+				Text("Settings View")
+			} label: {
+				Label("Settings", systemImage: "gear")
+			}
+			NavigationLink {
+				Text("Billing View")
+			} label: {
+				Label("Billing", systemImage: "creditcard")
+			}
+			NavigationLink {} label: {
+				Label("Help", systemImage: "questionmark")
+			}
+		}
+		.accentColor(.primary)
+		.listRowSeparator(.hidden)
+	}
+	
+	@ViewBuilder
+	private func links(destination: URL, label: String, image: String) -> some View {
+		if !isDeleted {
+			Link(destination: destination) {
+				HStack {
+					Label(label, systemImage: image)
+					Spacer()
+					Image(systemName: "link")
+						.foregroundColor(.secondary)
+				}
+			}
+			.swipeActions {
+				deleteAction
+				pinAction
+			}
+		}
+	}
+	
+	private var linksSection: some View {
+		Section {
+			links(destination: linkToGithub, label: "GitHub", image: "cloud")
+			links(destination: linkToGithub, label: "My CV", image: "newspaper")
+		}
+		.accentColor(.primary)
 	}
 }
 
