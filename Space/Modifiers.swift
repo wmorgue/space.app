@@ -9,9 +9,9 @@ import SwiftUI
 
 struct StrokeStyle: ViewModifier {
 	
+	let cornerRadius: CGFloat
 	@Environment(\.colorScheme) var colorScheme
 	
-	let cornerRadius: CGFloat
 	var gradient: LinearGradient {
 		.linearGradient(
 			colors: [
@@ -21,8 +21,6 @@ struct StrokeStyle: ViewModifier {
 			startPoint: .top, endPoint: .bottom
 		)
 	}
-	
-	
 	
 	func body(content: Content) -> some View {
 		content
@@ -47,6 +45,16 @@ struct MaterialBackground: ViewModifier {
 	}
 }
 
+struct TabBarLabel: LabelStyle {
+	func makeBody(configuration: Configuration) -> some View {
+		VStack(spacing: 0) {
+			configuration.icon
+			configuration.title
+		}
+	}
+}
+
+
 
 extension View {
 	func strokeStyle(cornerRadius: CGFloat = 30) -> some View {
@@ -57,3 +65,9 @@ extension View {
 		modifier(MaterialBackground(cornerRadius: cornerRadius, style: style))
 	}
 }
+
+
+extension LabelStyle where Self == TabBarLabel {
+	static var vertically: TabBarLabel { TabBarLabel() }
+}
+
