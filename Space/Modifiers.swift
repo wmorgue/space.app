@@ -68,6 +68,6 @@ extension View {
 
 
 extension LabelStyle where Self == TabBarLabel {
-	static var vertically: TabBarLabel { Self() }
+	static var vertically: TabBarLabel { .init() }
 }
 
