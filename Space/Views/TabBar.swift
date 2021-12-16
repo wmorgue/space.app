@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct TabBar: View {
+	private let previewData = TabItem.data
+	@State private var tabItemWidth: CGFloat = .zero
 	@State private var colorButtonBar: Color = .teal
 	@State private var selectedTab: CurrentTab = .home
-	@State private var tabItemWidth: CGFloat = .zero
 	
 	var body: some View {
-		ZStack {
-			tabContent(selectedTab)
+		ZStack(alignment: .bottom) {
+			
+			tabContent
 			buttonsBar
+				.padding(.horizontal, 8)
 				.padding(.top, 14)
 				.labelStyle(.vertically)
 				.frame(height: 88, alignment: .top)
@@ -33,9 +36,9 @@ struct TabBar: View {
 }
 
 extension TabBar {
-	func tabContent(_ tab: CurrentTab) -> some View {
+	var tabContent: some View {
 		Group {
-			switch tab {
+			switch selectedTab {
 				case .home:
 					ContentView()
 				case .explore:
@@ -54,7 +57,7 @@ extension TabBar {
 	
 	private var buttonsBar: some View {
 		HStack {
-			ForEach(TabItem.data) { item in
+			ForEach(previewData) { item in
 				Button {
 					withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
 						selectedTab = item.tab
@@ -69,8 +72,9 @@ extension TabBar {
 						Image(systemName: item.iconName)
 							.symbolVariant(.fill)
 							.font(.body.bold())
-							.frame(width: 80, height: 29)
+							.frame(width: 44, height: 29)
 					}
+					.frame(maxWidth: .infinity)
 				}
 				.foregroundStyle(selectedTab == item.tab ? .primary : .secondary)
 				.blendMode(selectedTab == item.tab ? .overlay : .normal)
@@ -85,7 +89,6 @@ extension TabBar {
 					tabItemWidth = value
 				}
 			}
-			.frame(maxWidth: .infinity)
 		}
 	}
 	
@@ -127,6 +130,6 @@ struct TabBar_Previews: PreviewProvider {
 	static var previews: some View {
 		TabBar()
 			.preferredColorScheme(.dark)
-			.previewInterfaceOrientation(.landscapeLeft)
+		//			.previewInterfaceOrientation(.landscapeRight)
 	}
 }
