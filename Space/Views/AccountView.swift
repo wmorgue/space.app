@@ -55,7 +55,7 @@ extension AccountView {
 	}
 	
 	private var profile: some View {
-		ProfileCard(
+		ProfileCardView(
 			personName: "Nikita Rossik",
 			countryName: "Russia",
 			imageName: nil
@@ -70,7 +70,7 @@ extension AccountView {
 				Label("Settings", systemImage: "gear")
 			}
 			NavigationLink {
-				Text("Billing View")
+				BillingView()
 			} label: {
 				Label("Billing", systemImage: "creditcard")
 			}

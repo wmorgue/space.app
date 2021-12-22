@@ -1,5 +1,5 @@
 //
-//  ProfileCard.swift
+//  ProfileCardView.swift
 //  Space
 //
 //  Created by Nikita Rossik on 12/10/21.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProfileCard: View {
+struct ProfileCardView: View {
 	let personName: String
 	let countryName: String?
 	let imageName: String?
@@ -49,7 +49,7 @@ struct ProfileCard: View {
 	}
 }
 
-extension ProfileCard {
+extension ProfileCardView {
 	var systemImageName: String {
 		imageName ?? "person.crop.circle.fill.badge.checkmark"
 	}
@@ -64,7 +64,7 @@ struct ProfileCard_Previews: PreviewProvider {
 	static var previews: some View {
 		NavigationView {
 			List {
-				ProfileCard(
+				ProfileCardView(
 					personName: "Nikita Rossik",
 					countryName: nil,
 					imageName: nil
