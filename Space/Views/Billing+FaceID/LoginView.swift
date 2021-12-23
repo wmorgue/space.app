@@ -33,14 +33,11 @@ extension LoginView {
 			PrimaryButtonView(text: "Login with TouchID", image: "touchid", authentacateAction: authAction.authentacateWithBiometrics)
 		case .faceID:
 			PrimaryButtonView(text: "Login with FaceID", image: "faceid", authentacateAction: authAction.authentacateWithBiometrics)
-		default:
-			NavigationLink {
+		case .none:
 				SecretKeyView()
 					.environmentObject(authAction)
-			} label: {
-				PrimaryButtonView(text: "Login with your key", image: nil) {}
-			}
-			
+		@unknown default:
+			fatalError("Unknown biometry type.")
 		}
 	}
 }

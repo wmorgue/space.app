@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import LocalAuthentication
 
 struct BillingView: View {
 	@StateObject private var authenticationAction = AuthenticationAction()
@@ -15,7 +16,10 @@ struct BillingView: View {
 			VStack {
 				switch authenticationAction.isAuthenticated {
 				case true:
-					Text("Billing History")
+					TitleView(text: "Billing History")
+					PrimaryButtonView(text: "Back", image: nil, showingImage: false) {
+						authenticationAction.logout()
+					}
 				case false:
 					LoginView()
 						.environmentObject(authenticationAction)
@@ -23,17 +27,37 @@ struct BillingView: View {
 			}
 			.frame(maxWidth: .infinity, maxHeight: .infinity)
 			.ignoresSafeArea(.all)
-			.alert(isPresented: $authenticationAction.showAlert) { authAlert }
+			.background(LinearGradient(
+				colors: [.blue, .purple],
+				startPoint: .topLeading,
+				endPoint: .bottomTrailing)
+			)
+			.alert(isPresented: $authenticationAction.showAlert) {
+				alertBiometryType(authenticationAction.biometryType)
+			}
 		}
 	}
 }
 
 
 extension BillingView {
-	private var authAlert: Alert {
-		Alert(
-			title: Text("Can't recognize FaceID"),
-			message: Text(authenticationAction.errorDescription ?? "Error to login"),
+	private func alertBiometryType(_ biometryType: LABiometryType) -> Alert {
+		var biometryTitle: Text {
+			switch biometryType {
+			case .none: return Text("Can't recognize API Key")
+			case .touchID: return Text("Can't recognize TouchID")
+			case .faceID: return Text("Can't recognize FaceID")
+			@unknown default: return Text("Unknown biometry type on device")
+			}
+		}
+		
+		var errorMessage: Text {
+			Text(authenticationAction.errorDescription ?? "Error to login")
+		}
+		
+		return Alert(
+			title: biometryTitle,
+			message: errorMessage,
 			dismissButton: .destructive(Text("Close"))
 		)
 	}

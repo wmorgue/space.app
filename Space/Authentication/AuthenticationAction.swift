@@ -68,4 +68,6 @@ extension AuthenticationAction {
 			showAlert = true
 		}
 	}
+	
+	func logout() { isAuthenticated = false }
 }
